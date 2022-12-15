@@ -4,43 +4,34 @@ import java.util.*;
 
 public class IsReachable {
     public static int solve(int[] A, final int B, final int C) {
-        int n = A.length;
-        Map<Integer, ArrayList<Integer>> graph = new HashMap<>();
+        int n = A.length + 1;
+        ArrayList<Integer>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++)
+            graph[i] = new ArrayList<>();
 
-        for (int i = 0; i < n; i++) {
-            if (!graph.containsKey(A[i])) {
-                graph.put(A[i], new ArrayList<>());
-            }
-
-            ArrayList<Integer> list = graph.getOrDefault(A[i], new ArrayList<>());
-            if (i + 1 != A[i])
-                list.add(i + 1);
-            graph.put(A[i], list);
+        for (int i = 0; i < n - 1; i++) {
+            graph[A[i]].add(i + 1);
         }
-        if (!graph.containsKey(C))
-            return 0;
 
-        Set<Integer> visited = new HashSet<>();
-        boolean path = isPath(graph, C, B, visited);
+        System.out.println(graph);
 
-        return path ? 1 : 0;
+        boolean[] visited = new boolean[n];
+        isPath(graph, C, B, visited);
+
+        return visited[B] ? 1 : 0;
 
     }
 
-    static boolean isPath(Map<Integer, ArrayList<Integer>> graph, int src, int dest, Set<Integer> visited) {
-        if (src == dest) {
-            return true;
+    static void isPath(ArrayList<Integer>[] graph, int src, int dest, boolean[] visited) {
+        if (visited[src]) {
+            return;
         }
-        visited.add(src);
-        for (Integer nbr : graph.getOrDefault(src, new ArrayList<>())) {
-            if (!visited.contains(nbr)) {
-                boolean path = isPath(graph, nbr, dest, visited);
-                if (path) {
-                    return true;
-                }
+        visited[src] = true;
+        for (int nbr : graph[src]) {
+            if (!visited[nbr]) {
+                isPath(graph, nbr, dest, visited);
             }
         }
-        return false;
     }
 
     public static void main(String[] args) {
