@@ -27,6 +27,17 @@ public class EdgeInMST {
         }
     }
 
+    class Pair {
+        int x, y, wt, idx;
+
+        public Pair(int x, int y, int wt, int idx) {
+            this.x = x;
+            this.y = y;
+            this.wt = wt;
+            this.idx = idx;
+        }
+    }
+
     public int[] solve(int n, int[][] grid) {
         parent = new int[n + 1];
         rank = new int[n + 1];
@@ -34,21 +45,35 @@ public class EdgeInMST {
             parent[i] = i;
             rank[i] = 1;
         }
-        Arrays.sort(grid, (a, b) -> a[2] - b[2]);
+        Pair[] pairs = new Pair[grid.length];
+        for (int i = 0; i < pairs.length; i++) {
+            pairs[i] = new Pair(grid[i][0], grid[i][1], grid[i][2], i);
+        }
+        Arrays.sort(pairs, (a, b) -> a.wt - b.wt);
         int[] res = new int[grid.length];
-        int idx = -1, pw = -1;
-        for (int i = 0; i < grid.length; i++) {
-            int u = grid[0][0], v = grid[0][1];
-            ++idx;
-            if (pw == grid[0][2])
-                continue;
-            int pu = find(u);
-            int pv = find(v);
-            if (pu != pv) {
-                res[idx] = 1;
-                union(pu, pv);
-                pw = grid[0][2];
+        int i = 0, j = 0;
+        while (i < grid.length) {
+            j = i;
+            while (j < grid.length && pairs[i].wt == pairs[j].wt) {
+                int u = pairs[j].x, v = pairs[j].y;
+                int pu = find(u);
+                int pv = find(v);
+                if (pu != pv) {
+                    res[pairs[j].idx] = 1;
+                }
+                j++;
             }
+            j = i;
+            while (j < grid.length && pairs[i].wt == pairs[j].wt) {
+                int u = pairs[j].x, v = pairs[j].y;
+                int pu = find(u);
+                int pv = find(v);
+                if (pu != pv) {
+                    union(pu, pv);
+                }
+                j++;
+            }
+            i = j;
         }
 
         return res;
