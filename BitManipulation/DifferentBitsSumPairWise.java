@@ -3,17 +3,18 @@ package BitManipulation;
 public class DifferentBitsSumPairWise {
     public int cntBits(int[] A) {
         int n = A.length;
-        long total = 0;
         int MOD = 1000000007;
+        long res = 0l;
         for (int i = 0; i < 32; i++) {
-            int set = 0;
-            for (int val : A) {
-                if (((val >> i) & 1) == 1)
-                    set++;
+            long setBits = 0l;
+            for (int j = 0; j < n; j++) {
+                if (((A[j] >> i) & 1) == 1) {
+                    setBits++;
+                }
             }
 
-            total = (total % MOD + (2 * set % MOD * (n - set) % MOD) % MOD) % MOD;
+            res = (res + 2 * setBits % MOD * (n - setBits) % MOD) % MOD;
         }
-        return (int) total % MOD;
+        return (int) res;
     }
 }
