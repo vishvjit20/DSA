@@ -19,14 +19,18 @@ public class ReverseInKGroup {
     }
 
     public ListNode reverseInKGroup(ListNode head, int k) {
+        if (k == 1)
+            return head;
+        if (head == null || head.next == null) {
+            return head;
+        }
         int count = k;
-        ListNode curr = head, prev = null, currNext = null;
-        while (curr != null && count > 0) {
-            currNext = curr.next;
+        ListNode prev = null, curr = head;
+        while (curr != null && count-- > 0) {
+            ListNode temp = curr.next;
             curr.next = prev;
             prev = curr;
-            curr = currNext;
-            count--;
+            curr = temp;
         }
         head.next = reverseInKGroup(curr, k);
         return prev;
