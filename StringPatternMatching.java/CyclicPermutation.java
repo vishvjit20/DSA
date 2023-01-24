@@ -2,7 +2,7 @@
 public class CyclicPermutation {
     public int solve(String A, String B) {
         B = B + B;
-        String str = A + '#' + B;
+        String str = A + '#' + B.substring(0, B.length() - 1);
         int n = A.length();
         int len = str.length();
         int z[] = new int[len];
@@ -20,7 +20,7 @@ public class CyclicPermutation {
     void z_function(char[] s, int z[]) {
         int n = s.length;
         int l = 0, r = 0;
-        for (int i = 0; i < s.length; i++) {
+        for (int i = 1; i < s.length; i++) {
             if (i <= r) {
                 z[i] = Math.min(r - i + 1, z[i - l]);
             }
