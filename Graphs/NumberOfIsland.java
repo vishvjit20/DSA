@@ -1,5 +1,3 @@
-package Graphs;
-
 public class NumberOfIsland {
     public int solve(int[][] A) {
         int n = A.length;
